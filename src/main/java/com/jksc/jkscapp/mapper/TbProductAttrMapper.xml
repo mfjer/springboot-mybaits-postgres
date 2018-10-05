@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jksc.jkscapp.dao.TbProductAttrMapper" >
+
+    <resultMap id="BaseResultMap" type="com.jksc.jkscapp.domain.TbProductAttr" >
+        <result column="id" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="attribute" property="attribute" jdbcType="OTHER"
+         	typeHandler="com.jksc.jkscapp.handler.JsonTypeHandler" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+	
+	<select id="findById" parameterType="String" resultMap="BaseResultMap">
+		select * from tb_product_attr where id=#{id}::uuid
+	</select>
+	
+    <insert id="insert" parameterType="com.jksc.jkscapp.domain.TbProductAttr" >
+        insert into public.tb_product_attr (id, name, attribute, 
+            create_time)
+        values (#{id}::uuid, #{name,jdbcType=VARCHAR}, #{attribute,jdbcType=OTHER,typeHandler=com.jksc.jkscapp.handler.JsonTypeHandler}, 
+            #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.jksc.jkscapp.domain.TbProductAttr" >
+        insert into public.tb_product_attr
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="attribute != null" >
+                attribute,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR}::uuid,
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="attribute != null" >
+                #{attribute,jdbcType=OTHER,typeHandler=com.jksc.jkscapp.handler.JsonTypeHandler},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    
+    <update id="updateData" parameterType="com.jksc.jkscapp.domain.TbProductAttr">
+    	update public.tb_product_attr
+        <set>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="attribute != null" >
+                attribute = #{attribute,jdbcType=OTHER,typeHandler=com.jksc.jkscapp.handler.JsonTypeHandler},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id=#{id}::uuid
+    </update>
+</mapper>
